@@ -1,0 +1,22 @@
+{
+  "name": "goit-js-hw-11-timer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "timer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bealkl/goit-js-hw-11-timer.git"
+  },
+  "author": "Oleksandr Bevzytskyi <bealkl@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bealkl/goit-js-hw-11-timer/issues"
+  },
+  "homepage": "https://github.com/bealkl/goit-js-hw-11-timer#readme",
+  "dependencies": {
+    "eslint": "^7.5.0"
+  }
+}

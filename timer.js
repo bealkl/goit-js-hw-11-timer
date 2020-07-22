@@ -1,33 +1,45 @@
 'use strict';
 
+const refs = {
+  btnStar: document.querySelector('.startBtn'),
+  btnStop: document.querySelector('.stopBtn'),
+  day: document.querySelector('[data-value="days"]'),
+  hour: document.querySelector('[data-value="hours"]'),
+  minute: document.querySelector('[data-value="mins"]'),
+  second: document.querySelector('[data-value="secs"]'),
+};
+
 class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = selector;
-    this.targetDate = targetDate.getTime();
-    this.timeCalculation = this.timeCalculation.bind(this);
-    this.begin();
-  }
-  timeCalculation() {
-    const day = document.querySelector('[data-value="days"]');
-    const hour = document.querySelector("[data-value='hours']");
-    const minute = document.querySelector("[data-value='mins']");
-    const second = document.querySelector("[data-value='secs']");
-    const timeNow = Date.now();
-    this.time = this.targetDate - timeNow;
-    const days = Math.floor(this.time / (1000 * 60 * 60 * 24));
-    day.textContent = days < 10 ? `0${days}` : days;
-    const hours = Math.floor(
-      (this.time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    );
-    hour.textContent = hours < 10 ? `0${hours}` : hours;
-    const mins = Math.floor((this.time % (1000 * 60 * 60)) / (1000 * 60));
-    minute.textContent = mins < 10 ? `0${mins}` : mins;
-    const secs = Math.floor((this.time % (1000 * 60)) / 1000);
-    second.textContent = secs < 10 ? `0${secs}` : secs;
-  }
+    this.targetDate = targetDate;
 
-  begin() {
-    setInterval(this.timeCalculation, 1000);
+    refs.btnStop.addEventListener('click', () => {
+      refs.btnStar.removeAttribute('disabled');
+      refs.btnStop.setAttribute('disabled', true);
+      clearInterval(this.selector);
+    });
+
+    refs.btnStar.addEventListener('click', () => {
+      refs.btnStar.setAttribute('disabled', true);
+      refs.btnStop.removeAttribute('disabled');
+
+      this.selector = setInterval(() => {
+        const diffTime = this.targetDate - Date.now();
+        refs.day.textContent = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+          .toString()
+          .padStart(3, 0);
+        refs.hour.textContent = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+          .toString()
+          .padStart(2, 0);
+        refs.minute.textContent = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60))
+          .toString()
+          .padStart(2, 0);
+        refs.second.textContent = Math.floor((diffTime % (1000 * 60)) / 1000)
+          .toString()
+          .padStart(2, 0);
+      }, 1000);
+    });
   }
 }
 
@@ -35,28 +47,3 @@ new CountdownTimer({
   selector: '#timer-1',
   targetDate: new Date('Jan 1, 2021'),
 });
-
-/*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
-
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
-const secs = Math.floor((time % (1000 * 60)) / 1000);
